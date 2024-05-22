@@ -44,7 +44,8 @@ local M = {}
 M._plenary = function(args)
 	local job_opts = {
 		command = "curl",
-		args = { "localhost:3000/", args },
+		-- args = vim.iter({ "localhost:3000/", args }):flatten():totable(),
+		args = { "localhost:3000/getIssues" },
 		-- args = vim.tbl_flatten({ "api", reqUrl }),
 	}
 	log.info("Running job", job_opts)
@@ -78,7 +79,7 @@ M.make_entry = function(entry)
 end
 
 M.showissue = function(opts)
-	local tbl = M._plenary({ "issues" })
+	local tbl = M._plenary("issues")
 	local decoded = vim.fn.json_decode(tbl)
 	for _, value in ipairs(decoded) do
 		table.insert(tbl, { url = value.html_url, title = value.title })
